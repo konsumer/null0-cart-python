@@ -4,5 +4,5 @@ def load():
   say_hello("world")
 
 def update(deltaTime):
-  clear(0, (0, 0, 0, 255))
-  draw_line(0, 10, 10, 100, 100, 2, (255, 255, 255, 255))
+  clear(0, RAYWHITE)
+  draw_line(0, 10, 10, 100, 100, 2, RED)

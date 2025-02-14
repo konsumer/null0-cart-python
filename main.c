@@ -6,7 +6,6 @@
 static py_Ref py_load_func = 0;
 static py_Ref py_update_func = 0;
 
-// C implementations that call Python
 void load() {
     if (py_load_func) {
         py_push(py_load_func);
@@ -45,7 +44,6 @@ static bool say_hello(int argc, py_Ref argv) {
     return true;
 }
 
-// helper for Color arguments
 static Color py_get_color(py_Ref color_ref) {
     // Assume color_ref is a tuple/list of 4 numbers (r,g,b,a)
     py_Ref r = py_list_getitem(color_ref, 0);
@@ -61,7 +59,6 @@ static Color py_get_color(py_Ref color_ref) {
     };
 }
 
-// Example binding for clear()
 static bool py_clear(int argc, py_Ref argv) {
     PY_CHECK_ARGC(2);
     u32 destination = py_toint(py_arg(0));
@@ -71,7 +68,6 @@ static bool py_clear(int argc, py_Ref argv) {
     return true;
 }
 
-// Example binding for draw_line()
 static bool py_draw_line(int argc, py_Ref argv) {
     PY_CHECK_ARGC(7);
     u32 destination = py_toint(py_arg(0));
@@ -115,6 +111,35 @@ int main() {
 
     py_newnativefunc(r0, py_draw_line);
     py_setglobal(py_name("draw_line"), r0);
+
+    py_exec(
+        "LIGHTGRAY = (200, 200, 200, 255)\n"
+        "GRAY = (130, 130, 130, 255)\n"
+        "DARKGRAY = (80, 80, 80, 255)\n"
+        "YELLOW = (253, 249, 0, 255)\n"
+        "GOLD = (255, 203, 0, 255)\n"
+        "ORANGE = (255, 161, 0, 255)\n"
+        "PINK = (255, 109, 194, 255)\n"
+        "RED = (230, 41, 55, 255)\n"
+        "MAROON = (190, 33, 55, 255)\n"
+        "GREEN = (0, 228, 48, 255)\n"
+        "LIME = (0, 158, 47, 255)\n"
+        "DARKGREEN = (0, 117, 44, 255)\n"
+        "SKYBLUE = (102, 191, 255, 255)\n"
+        "BLUE = (0, 121, 241, 255)\n"
+        "DARKBLUE = (0, 82, 172, 255)\n"
+        "PURPLE = (200, 122, 255, 255)\n"
+        "VIOLET = (135, 60, 190, 255)\n"
+        "DARKPURPLE = (112, 31, 126, 255)\n"
+        "BEIGE = (211, 176, 131, 255)\n"
+        "BROWN = (127, 106, 79, 255)\n"
+        "DARKBROWN = (76, 63, 47, 255)\n"
+        "WHITE = (255, 255, 255, 255)\n"
+        "BLACK = (0, 0, 0, 255)\n"
+        "BLANK = (0, 0, 0, 0)\n"
+        "MAGENTA = (255, 0, 255, 255)\n"
+        "RAYWHITE = (245, 245, 245, 255)",
+        "colors", EXEC_MODE, NULL);
 
     bool ok = py_exec(buffer, "main.py", EXEC_MODE, NULL);
     free(buffer);
